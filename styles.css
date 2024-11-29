@@ -1,0 +1,48 @@
+body * {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
+}
+
+.grid-container {
+	display: grid;
+	height: auto;
+	grid-template-columns: 50px 50px 50px;
+	grid-template-rows: 50px 50px 50px;
+	border: solid 4px;
+}
+
+.scoreboard-container {
+	display: flex;
+	width: 175px;
+	height: auto;
+	justify-content: space-between;
+}
+
+
+.cell {
+	display: flex;
+	height: 50px;
+	width: 50px;
+	justify-content: center;
+	align-items: center;
+	border: solid 1px;
+	font-size: 3rem;
+}
+
+.controls-container {
+	display: flex;
+	justify-content: center;
+}
+
+.cell:hover {
+	background-color: grey;
+}
+
