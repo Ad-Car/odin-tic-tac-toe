@@ -1,6 +1,9 @@
 function createGrid() {
+	let occupiedSquares = 0;
 	let grid = Array(9).fill(' ');
-	return grid;
+	const increaseSquares = () => occupiedSquares++;
+	const getOccupiedSquares = () => occupiedSquares;
+	return { grid, increaseSquares, getOccupiedSquares };
 }
 
 function createPlayer(name, marker) {
@@ -44,7 +47,7 @@ function drawGrid() {
 		gridContainer.appendChild(cell);
 		cell.setAttribute("id", `cell-${i}`);
 		cell.classList.add("cell");
-		document.getElementById(`cell-${i}`).textContent = grid[i];
+		document.getElementById(`cell-${i}`).textContent = gameBoard.grid[i];
 		cell.addEventListener("click", () => {
 			let cellNo = (cell.id).slice(-1);
 			placeMarker(cellNo);
@@ -81,8 +84,8 @@ function writeToScoreboard() {
 function placeMarker(square) {
 	let activePlayer = game.getCurrentPlayer()
 	let marker = (activePlayer === 'player1') ? `${player1.marker}`: `${player2.marker}`;
-	if (grid[square] === ' ') {
-		grid[square] = marker;
+	if (gameBoard.grid[square] === ' ') {
+		gameBoard.grid[square] = marker;
 		drawGrid();
 		if(checkForWin(activePlayer)) {
 			console.log(`${activePlayer} WINS!`)
@@ -91,7 +94,7 @@ function placeMarker(square) {
 			} else { player2.increaseScore() }
 			scoreboard.nextRound();
 			writeToScoreboard();
-			grid = createGrid();
+			gameBoard = createGrid();
 			drawGrid();
 		}
 		game.togglePlayer();
@@ -99,20 +102,20 @@ function placeMarker(square) {
 }
 
 function play(player, square) {
-	if (grid[square] === ' ') {
-		grid[square] = player.marker;
+	if (gameBoard.grid[square] === ' ') {
+		gameBoard.grid[square] = player.marker;
 	}
 }
 
 function checkForWin(player) {
-	let row1 = grid.slice(0, 3);
-	let row2 = grid.slice(3, 6);
-	let row3 = grid.slice(6, 9);
-	let col1 = [ grid[0], grid[3], grid[6] ];
-	let col2 = [ grid[1], grid[4], grid[7] ];
-	let col3 = [ grid[2], grid[5], grid[8] ];
-	let diag1 = [ grid[0], grid[4], grid[8] ];
-	let diag2 = [ grid[2], grid[4], grid[6] ];
+	let row1 = gameBoard.grid.slice(0, 3);
+	let row2 = gameBoard.grid.slice(3, 6);
+	let row3 = gameBoard.grid.slice(6, 9);
+	let col1 = [ gameBoard.grid[0], gameBoard.grid[3],gameBoard.grid[6] ];
+	let col2 = [ gameBoard.grid[1], gameBoard.grid[4],gameBoard.grid[7] ];
+	let col3 = [ gameBoard.grid[2], gameBoard.grid[5],gameBoard.grid[8] ];
+	let diag1 = [ gameBoard.grid[0], gameBoard.grid[4],gameBoard.grid[8] ];
+	let diag2 = [ gameBoard.grid[2], gameBoard.grid[4],gameBoard.grid[6] ];
 	let checks = [row1, row2, row3, col1, col2, col3, diag1, diag2 ];
 	for (check of checks) {
 	let activePlayer = game.getCurrentPlayer()
@@ -124,7 +127,7 @@ function checkForWin(player) {
 	} 
 }
 
-grid = createGrid();
+gameBoard = createGrid();
 scoreboard = createScoreboard();
 
 const player1 = createPlayer("Adam", "X");
