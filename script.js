@@ -56,13 +56,54 @@ function drawGrid() {
 }
 
 function drawScoreboard() {
+	const messageContainer = document.querySelector(".scoreboard-message-container");
+	const messages = document.createElement("div");
+	messages.classList.add("messages");
+	messageContainer.appendChild(messages);
+
 	const scoreboardContainer = document.querySelector(".scoreboard-container");
+
 	for (i = 0; i < 3; i++) {
 		const holder = document.createElement("div");
 		scoreboardContainer.appendChild(holder);
 		holder.setAttribute("id", `scoreboard-holder-${i}`);
 		holder.classList.add("scoreboard-holder");
 	}
+
+	const controlsContainer = document.querySelector(".controls-container");
+	const controls = document.createElement("div");
+	const enterPlayersButton = document.createElement("button");
+	enterPlayersButton.innerText = "Enter players";
+	const resetButton = document.createElement("button");
+	resetButton.innerText = "Reset";
+
+	controlsContainer.appendChild(resetButton);
+	controlsContainer.appendChild(enterPlayersButton);
+	
+	resetButton.addEventListener("click", () => {
+		window.location.reload()
+	});
+
+	const enterPlayersDialog = document.getElementById("enterPlayersDialog");
+
+	enterPlayersButton.addEventListener("click", () => {
+		enterPlayersDialog.showModal();
+	});
+
+	enterPlayersDialog.addEventListener("close", () => {
+		const result = enterPlayersDialog.returnValue;
+		if (result === "add") {
+			const formData = new FormData(enterPlayersDialog.querySelector('form'));
+			const name1 = formData.get('player1');
+			const name2 = formData.get('player2');
+			
+			player1 = createPlayer(`${name1}`, "X");
+			player2 = createPlayer(`${name2}`, "O");
+			writeToScoreboard();
+
+			console.log(player1, player2);
+		}
+	});
 }
 
 function displayActivePlayer(activePlayer) {
@@ -86,6 +127,8 @@ function placeMarker(square) {
 	let marker = (activePlayer === 'player1') ? `${player1.marker}`: `${player2.marker}`;
 	if (gameBoard.grid[square] === ' ') {
 		gameBoard.grid[square] = marker;
+		gameBoard.increaseSquares()
+		console.log(gameBoard.getOccupiedSquares());
 		drawGrid();
 		if(checkForWin(activePlayer)) {
 			console.log(`${activePlayer} WINS!`)
@@ -97,13 +140,19 @@ function placeMarker(square) {
 			gameBoard = createGrid();
 			drawGrid();
 		}
+		if(checkForDraw()) {
+			scoreboard.nextRound();
+			writeToScoreboard();	
+			gameBoard = createGrid();
+			drawGrid();
+		}
+		let result = checkGameComplete()
+			if(result) {
+				document.querySelector(".messages").textContent = result;
+				console.log(result);
+				reset();
+		}
 		game.togglePlayer();
-	}
-}
-
-function play(player, square) {
-	if (gameBoard.grid[square] === ' ') {
-		gameBoard.grid[square] = player.marker;
 	}
 }
 
@@ -127,11 +176,38 @@ function checkForWin(player) {
 	} 
 }
 
-gameBoard = createGrid();
-scoreboard = createScoreboard();
+function checkForDraw() {
+	if (gameBoard.getOccupiedSquares() === 9) {
+		return true;
+	}
+	return;
+}
 
-const player1 = createPlayer("Adam", "X");
-const player2 = createPlayer("Bryn", "O");
+function checkGameComplete() {
+	if (scoreboard.getRound() === 6) {
+		if (player1.getScore() === player2.getScore()) {
+			return "Game is a draw"}
+		if (player1.getScore() > player2.getScore()) {
+			return `The winner is ${player1.name}`;
+		} else {
+			return `The winner is ${player2.name}`;
+		}
+	}
+		return false;
+}		
+
+function reset() {
+	gameBoard = createGrid();
+	scoreboard = createScoreboard();
+	drawGrid();
+	drawScoreboard();
+}
+		
+let gameBoard = createGrid();
+let scoreboard = createScoreboard();
+
+let player1 = createPlayer("Player 1", "X");
+let player2 = createPlayer("Player 2", "O");
 const game = createPlayerToggle();
 
 window.addEventListener('load', () => {

@@ -7,10 +7,29 @@
 </head>
 <body>
 	<div class="container">
+		<div class="scoreboard-message-container"></div>
 		<div class="scoreboard-container"></div>
 		<div class="grid-container"></div>
 		<div class="controls-container"></div>
-		<script src="script.js"></script>
 	</div>
-</body>
+	<div class="modal-container">
+		<dialog id="enterPlayersDialog">
+			<form method="dialog">
+				<div class="form-container">
+					<div>
+						<label for="player1">Player 1</label>
+						<input type="text" id="player1" name="player1">
+					</div>
+					<div>
+						<label for="player2">Player 2</label>
+						<input type="text" id="player2" name="player2">
+					</div>
+					<button id="cancel" value="cancel">Cancel</button>
+					<button id="confirm-add" type="submit" value="add">Add players</button>
+				</div>
+			</form>
+		</dialog>
+	</div>
+		<script src="script.js"></script>
+	</body>
 </html>
