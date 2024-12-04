@@ -57,6 +57,7 @@ function drawGrid() {
 
 function drawScoreboard() {
 	const messageContainer = document.querySelector(".scoreboard-message-container");
+
 	const messages = document.createElement("div");
 	messages.classList.add("messages");
 	messageContainer.appendChild(messages);
@@ -69,6 +70,10 @@ function drawScoreboard() {
 		holder.setAttribute("id", `scoreboard-holder-${i}`);
 		holder.classList.add("scoreboard-holder");
 	}
+}
+
+function drawControls() {
+	/*CONSIDER PUTTING CONTROLS IN A SEPARATE FUNCTION*/	
 
 	const controlsContainer = document.querySelector(".controls-container");
 	const controls = document.createElement("div");
@@ -188,7 +193,7 @@ function checkGameComplete() {
 		if (player1.getScore() === player2.getScore()) {
 			return "Game is a draw"}
 		if (player1.getScore() > player2.getScore()) {
-			return `The winner is ${player1.name}`;
+			return `${player1.name} wins!`;
 		} else {
 			return `The winner is ${player2.name}`;
 		}
@@ -201,6 +206,7 @@ function reset() {
 	scoreboard = createScoreboard();
 	drawGrid();
 	drawScoreboard();
+	drawControls();
 }
 		
 let gameBoard = createGrid();
@@ -215,4 +221,5 @@ window.addEventListener('load', () => {
 	drawScoreboard();
 	writeToScoreboard();
 	displayActivePlayer(game.getCurrentPlayer());
+	drawControls();
 });
