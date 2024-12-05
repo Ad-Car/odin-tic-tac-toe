@@ -21,9 +21,9 @@ body * {
 
 .scoreboard-container {
 	display: flex;
-	width: 175px;
+	width: 300px;
 	height: auto;
-	justify-content: space-between;
+	justify-content: space-around;
 }
 
 .messages {

@@ -56,6 +56,11 @@ function drawGrid() {
 }
 
 function drawScoreboard() {
+	let existingMessages = document.querySelector(".messages");
+	if (existingMessages) {
+		existingMessages.remove();
+	}
+
 	const messageContainer = document.querySelector(".scoreboard-message-container");
 
 	const messages = document.createElement("div");
@@ -63,6 +68,13 @@ function drawScoreboard() {
 	messageContainer.appendChild(messages);
 
 	const scoreboardContainer = document.querySelector(".scoreboard-container");
+
+	let existingHolders = document.querySelectorAll(".scoreboard-holder")
+	if (existingHolders) {
+	existingHolders.forEach( holder => {
+		holder.remove()
+	})
+  }
 
 	for (i = 0; i < 3; i++) {
 		const holder = document.createElement("div");
@@ -73,7 +85,12 @@ function drawScoreboard() {
 }
 
 function drawControls() {
-	/*CONSIDER PUTTING CONTROLS IN A SEPARATE FUNCTION*/	
+	let existingButtons = document.querySelectorAll(".control-button");
+	if (existingButtons) {
+		existingButtons.forEach( button => {
+			button.remove();
+		})
+	}
 
 	const controlsContainer = document.querySelector(".controls-container");
 	const controls = document.createElement("div");
@@ -83,7 +100,9 @@ function drawControls() {
 	resetButton.innerText = "Reset";
 
 	controlsContainer.appendChild(resetButton);
+	resetButton.classList.add("control-button")
 	controlsContainer.appendChild(enterPlayersButton);
+	enterPlayersButton.classList.add("control-button")
 	
 	resetButton.addEventListener("click", () => {
 		window.location.reload()
@@ -122,9 +141,9 @@ function displayActivePlayer(activePlayer) {
 }
 
 function writeToScoreboard() {
-	document.querySelector('#scoreboard-holder-0').textContent = `${player1.name} ${player1.getScore()}`
+	document.querySelector('#scoreboard-holder-0').textContent = `${player1.name}(${player1.marker}): ${player1.getScore()}`
 	document.querySelector('#scoreboard-holder-1').textContent = `Round ${scoreboard.getRound()}`
-	document.querySelector('#scoreboard-holder-2').textContent = `${player2.name} ${player2.getScore()}`
+	document.querySelector('#scoreboard-holder-2').textContent = `${player2.name}(${player2.marker}): ${player2.getScore()}`
 }
 
 function placeMarker(square) {
@@ -153,9 +172,11 @@ function placeMarker(square) {
 		}
 		let result = checkGameComplete()
 			if(result) {
+				
 				document.querySelector(".messages").textContent = result;
 				console.log(result);
-				reset();
+				setTimeout( () => {
+				reset(); }, 2000);
 		}
 		game.togglePlayer();
 	}
@@ -204,8 +225,12 @@ function checkGameComplete() {
 function reset() {
 	gameBoard = createGrid();
 	scoreboard = createScoreboard();
+	/*message and controls must be removed first -
+	 * otherwise they are duplicated when this function
+	 * is called */
 	drawGrid();
 	drawScoreboard();
+	writeToScoreboard();
 	drawControls();
 }
 		
