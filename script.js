@@ -125,7 +125,10 @@ function drawControls() {
 			player2 = createPlayer(`${name2}`, "O");
 			writeToScoreboard();
 
-			console.log(player1, player2);
+			const inputs = enterPlayersDialog.querySelectorAll('input');
+			inputs.forEach(input => {
+				input.value = '';
+			});
 		}
 	});
 }
@@ -142,7 +145,7 @@ function displayActivePlayer(activePlayer) {
 
 function writeToScoreboard() {
 	document.querySelector('#scoreboard-holder-0').textContent = `${player1.name}(${player1.marker}): ${player1.getScore()}`
-	document.querySelector('#scoreboard-holder-1').textContent = `Round ${scoreboard.getRound()}`
+	document.querySelector('#scoreboard-holder-1').textContent = (scoreboard.getRound() < 6) ? `Round ${scoreboard.getRound()}` : ` `;
 	document.querySelector('#scoreboard-holder-2').textContent = `${player2.name}(${player2.marker}): ${player2.getScore()}`
 }
 
@@ -225,9 +228,6 @@ function checkGameComplete() {
 function reset() {
 	gameBoard = createGrid();
 	scoreboard = createScoreboard();
-	/*message and controls must be removed first -
-	 * otherwise they are duplicated when this function
-	 * is called */
 	drawGrid();
 	drawScoreboard();
 	writeToScoreboard();
